@@ -1,0 +1,15 @@
+name: audit pipeline
+
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "release"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm audit

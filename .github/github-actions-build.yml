@@ -1,4 +1,4 @@
-name: lint pipeline
+name: build pipeline
 
 on:
   push:
@@ -6,9 +6,8 @@ on:
       - "**"
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm run lint
+      - run: docker build -t web-app .
