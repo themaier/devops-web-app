@@ -3,15 +3,12 @@ name: audit pipeline
 on:
   push:
     branches:
-      - "**"
-  pull_request:
-    branches:
       - "main"
+      - "master"
       - "release"
 
 jobs:
   audit:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
