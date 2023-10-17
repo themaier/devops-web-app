@@ -1,0 +1,16 @@
+name: dockerhub pipeline
+
+on:
+  push:
+    branches:
+      - "release"
+
+jobs:
+  dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      #login to DockerHub without exposing secrets stored in github-env to log-files
+      - run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+      - run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/web-app:latest .
+      - run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/web-app:latest
