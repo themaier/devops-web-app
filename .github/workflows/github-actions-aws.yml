@@ -1,0 +1,31 @@
+name: aws pipeline
+
+env:
+  AWS_REGION: "us-west-1"
+
+on:
+  push:
+    branches:
+      - "release"
+
+jobs:
+  aws:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/web-app:latest .
+          $(aws ecr get-login --no-include-email --region ${{ env.AWS_REGION }})
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ senv.AWS_REGION }}.amazonaws.com/web-app:latest
+
+      - name: Deploy to App Runner
+        run: |
+          aws apprunner start-deployment --service-arn "arn:aws:apprunner:REGION:ACCOUNT:service/SERVICE_NAME/RESOURCE_ID"
