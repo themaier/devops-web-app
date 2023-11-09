@@ -1,0 +1,14 @@
+# if the file should be accessable through web.
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-web-app-service
+spec:
+  selector:
+    app: devops-web-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30001
+  type: NodePort
