@@ -1,10 +1,17 @@
 First i created a docker image and pushed it to dockerhub.
 Then i created a kind cluster and added the docker image.
 With portforwarding i can access the next.js app on localhost:8080.
+
+![Alt text](web-app-on-local-host-kind.png)
+
 Then i added a Kubernetes dashboard to monitor the load.
-Then i 
+I also added a Kubernetes metrics server so that the hpa and the dashboard get load information.
+Finally i added a Busybox container calling Website internally 1000 times a second and watched the replicas scaling up.
+Then i turned off the load and the replicas scaled back down again :) .
 
 
+![Alt text](kubernetes_scaling_up_pods.png)
+![Alt text](scale_down_replica.png)
 
 
 **-----------Setup-----------**
@@ -22,9 +29,6 @@ kubectl apply -f assignment2/hpa.yml
 <!-- kubectl get svc devops-web-app-service -->
 kubectl port-forward service/devops-web-app-service 8080:3000
 http://localhost:8080/
-
-
-![Alt text](web-app-on-local-host-kind.png)
 
 
 **Kubernetes Dashboard:**
@@ -59,9 +63,6 @@ while true; do
   wget -q -O- http://10.96.154.2:3000
   sleep 0.001
 done
-
-![Alt text](kubernetes_scaling_up_pods.png)
-![Alt text](scale_down_replica.png)
 
 <!-- Strg + C to stop -->
 
